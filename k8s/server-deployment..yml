@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metedata:
+  name: server-deployment
+spec:
+  replicas: 3
+  selectors:
+    matchLabels: 
+      component: server
+    template:
+      metedata:
+        lables:
+          component: server
+      spec:
+        containers: 
+          - name: server
+            image: Shareef1999/multi-server
+            ports:
+              - containerPort: 5000 
+            env:
+              - name: REDIS_HOST
+                value: redis-cluster-ip-service
+              - name: REDIS_PORT
+                value: '6379'
+              - name: PGUSER
+                value: postgres  
+              - name: PGHOST
+                value: postgress-cluster-ip-service
+              - name: PGPOPRT
+                value: '5432'
+              - name: PGDATABASE
+                value: postgres
+              - name: PGPASSWORD
+                valuefrom: 
+                  secretKeyRef:
+                    name: pgpassword
+                    key: PGPASSWORD
